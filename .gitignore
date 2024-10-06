@@ -1,0 +1,13 @@
+
+
+# file extension to ignore
+ExcelSorbólOszlop/*.xls*
+
+#folders to ignore
+AdószámlaLekérdező
+Archive
+dev1
+ExcelMakro
+Fejlesztés
+könyvelés1.4
+test

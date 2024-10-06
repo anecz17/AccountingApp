@@ -1,0 +1,9 @@
+created a virtual environment
+installed the required packages
+	If tkinter init error after compiling and trying to run the python script, use hidden:
+	pyinstaller --onefile --hidden-import=tkinter .\Könyvelői_Kisprogram.py
+
+
+Letölti az ügyfelek adószámláit az adóhivatal adatbázisából.
+
+Számlázó program exportját főkönyvi addatokkal feltölti. Kontírozza és a költséghely besorolást részlegesen elvégzi.
