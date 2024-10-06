@@ -1,5 +1,15 @@
 # Könyvelői Segédprogram Gyűjtemény
 
+## Tartalomjegyzék
+- [Áttekintés](#áttekintés)
+- [Telepítés](#telepítés)
+- [Használat](#használat)
+- [Funkciók](#funkciók)
+- [Hozzájárulás](#hozzájárulás)
+- [Licenc](#licenc)
+- [Kapcsolat](#kapcsolat)
+
+
 ## Áttekintés
 A projektnek jelenlég két része van:
 - App: ebben a mappában található az alkalmazás, aminek két fő része van. 
@@ -13,14 +23,6 @@ Az alkalmazás a felhasználónév és jelsző megadása után Mozilla Firefoxot
 ### Excel Makró
 Választhatóan feltölti a Liget Hotel és a Liget Cafe számlázó program exportját főkönyvi adatokkal. Törli a csv-t és megnyitja a szerkesztett dokumentumot az alapértelmezett csv megnyitó programban. A kész fájlok a Liget Hotel/Liget Cafe mappákba kerülnek.
 
-## Tartalomjegyzék
-- [Áttekintés](#áttekintés)
-- [Telepítés](#telepítés)
-- [Használat](#használat)
-- [Funkciók](#funkciók)
-- [Hozzájárulás](#hozzájárulás)
-- [Licenc](#licenc)
-- [Kapcsolat](#kapcsolat)
 
 ## Telepítés
 ### App
@@ -32,9 +34,20 @@ A requirements.txt tartalmazza a minimális követelményeket.
 ## Használat
 Open Source, ingyenesen használható a licencnek megfelelően.
 
+## Funkciók
+Lásd [Áttekintés](#áttekintés).
+
+## Hozzájárulás
+Lásd [Áttekintés](#áttekintés).
+
+## Licenc
+Lásd [MIT License](./LICENSE).
+
+
 ## Kapcsolat
 Necz András
-[text](https://www.linkedin.com/in/andras-necz/)
+
+[LinkedIn](https://www.linkedin.com/in/andras-necz/)
 
 
 
