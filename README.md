@@ -46,7 +46,7 @@ Az appot a zip fájlban érdemes letölteni. A működéshez szükséges, hogy a
 *A requirements.txt tartalmazza a minimális követelményeket.*
 
 ## Használat
-*A script futtatása* ```python main.py```
+*A script futtatása* ```python könyvelői_Kisprogram1.5.py```
 
 ## Funkciók
 **v1.5**
