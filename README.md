@@ -51,6 +51,7 @@ Az appot a zip fájlban érdemes letölteni. A működéshez szükséges, hogy a
 ## Funkciók
 **v1.5**
 - A jelszó már csillagozva van gépelés közben.
+- Túllép a ebev honlapon figyelmeztetésen
 - A program nem omlik össze, ha nem tudja törölni az eredeti csv fájlt
 
 **v2.0**
