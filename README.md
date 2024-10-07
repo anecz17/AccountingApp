@@ -60,7 +60,10 @@ python main.py
 
 
 ## Hozzájárulás
-Lásd [Áttekintés](#áttekintés).
+1. Forkold a repository-t
+2. Hozz létre egy új branch-et (git checkout -b új-funkció-branch)
+3. Végezd el a változtatásokat és commitolj (git commit -m 'Hozzáadott funkció')
+4. Pushold a branch-et (git push origin új-funkció-branch)
 
 ## Licenc
 Lásd [MIT License](./LICENSE).
