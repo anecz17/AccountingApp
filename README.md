@@ -71,6 +71,7 @@ Lásd [MIT License](./LICENSE).
 ## Kapcsolat
 Necz András
 [LinkedIn](https://www.linkedin.com/in/andras-necz/)
+[Github](https://www.github.com/anecz17)
 
 
 
