@@ -12,10 +12,12 @@
 
 ## Áttekintés
 A projektnek jelenlég két része van:
-- App: ebben a mappában található az alkalmazás, aminek két fő része van. 
+**App**: ebben a mappában található az alkalmazás, aminek két része van. 
 1. Letölti az ügyfelek adószámláit az adóhivatal adatbázisából
 2. Számlázó program exportját főkönyvi adatokkal feltölti. Kontírozza és a költséghely besorolást részlegesen elvégzi.
 
+**Script**:
+Egy rossz formátumban lévő excel fájlt rendez. 
 
 ### Adószámla lekérdezés:
 Az alkalmazás a felhasználónév és jelsző megadása után Mozilla Firefoxot használva megnyitja a https://ebev.nav.gov.hu/ honlapot. Bejelentkezik. Majd letölti az összes adószámlát a jelenlegi időszaknak megfelelően. Az ügyfelek neve és felhasználóneve a data.json fájlban vannak tárolva. Az alkalmazás jelszavakat nem tárol, azokat minden egyes alkalommal meg kell adni.
@@ -29,13 +31,33 @@ Választhatóan feltölti a Liget Hotel és a Liget Cafe számlázó program exp
 Az appot a zip fájlban érdemes letölteni. A működéshez szükséges, hogy a data.json és a path.json is az exe mappájában legyen.
 
 ### Fejlesztés
-A requirements.txt tartalmazza a minimális követelményeket.
+*Klónozd a repository-t*
+git clone https://github.com/anecz17/AccountingApp.git
+
+*Lépj be a projekt könyvtárába*
+cd projekt-név
+
+*Hozz létre virtuális környezetet (opcionális, de ajánlott)*
+python -m venv venv
+source venv/bin/activate   // Windows-on: venv\Scripts\activate
+
+*Függőségek telepítése*
+pip install -r requirements.txt
+*A requirements.txt tartalmazza a minimális követelményeket.*
 
 ## Használat
-Open Source, ingyenesen használható a licencnek megfelelően.
+*A script futtatása*
+python main.py
 
 ## Funkciók
-Lásd [Áttekintés](#áttekintés).
+**v1.5**
+- A jelszó már csillagozva van gépelés közben.
+- A program nem omlik össze, ha nem tudja törölni az eredeti csv fájlt
+- 
+
+**v2.0**
+- Az adószámla lekérdezés megszűnik az eddigi weboldalon így a 2.0-ás verzió már az új weboldalról fogja lekérni az adatokat.
+
 
 ## Hozzájárulás
 Lásd [Áttekintés](#áttekintés).
@@ -43,12 +65,9 @@ Lásd [Áttekintés](#áttekintés).
 ## Licenc
 Lásd [MIT License](./LICENSE).
 
-
 ## Kapcsolat
 Necz András
-
 [LinkedIn](https://www.linkedin.com/in/andras-necz/)
-
 
 
 

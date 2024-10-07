@@ -1,7 +1,7 @@
 
 
 # file extension to ignore
-ExcelSorbólOszlop/*.xls*
+Script/*.xls*
 
 #folders to ignore
 AdószámlaLekérdező
