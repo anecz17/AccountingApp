@@ -56,6 +56,7 @@ Az appot a zip fájlban érdemes letölteni. A működéshez szükséges, hogy a
 
 **v2.0**
 - Az adószámla lekérdezés megszűnik az eddigi weboldalon így a 2.0-ás verzió már az új weboldalról fogja lekérni az adatokat.
+- BeautifulSoup ? Tkinter
 
 
 ## Hozzájárulás
