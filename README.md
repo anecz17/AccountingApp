@@ -23,7 +23,7 @@ Egy rossz formátumban lévő excel fájlt rendez.
 Az alkalmazás a felhasználónév és jelsző megadása után Mozilla Firefoxot használva megnyitja a https://ebev.nav.gov.hu/ honlapot. Bejelentkezik. Majd letölti az összes adószámlát a jelenlegi időszaknak megfelelően. Az ügyfelek neve és felhasználóneve a data.json fájlban vannak tárolva. Az alkalmazás jelszavakat nem tárol, azokat minden egyes alkalommal meg kell adni.
 
 ### Excel Makró
-Választhatóan feltölti a Liget Hotel és a Liget Cafe számlázó program exportját főkönyvi adatokkal. Törli a csv-t és megnyitja a szerkesztett dokumentumot az alapértelmezett csv megnyitó programban. A kész fájlok a *Liget Hotel*/*Liget Cafe* mappákba kerülnek.
+Választhatóan feltölti a Hotel és a Cafe számlázó program exportját főkönyvi adatokkal. Törli a csv-t és megnyitja a szerkesztett dokumentumot az alapértelmezett csv megnyitó programban. A kész fájlok a *Hotel*/*Cafe* mappákba kerülnek.
 
 
 ## Telepítés

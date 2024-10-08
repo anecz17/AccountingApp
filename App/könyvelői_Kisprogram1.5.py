@@ -132,7 +132,7 @@ def utvonalModositas():
     útvonal = simpledialog.askstring("Input", "Fájlok helye:", initialvalue="D:\\elérési\\útvonal\\")
     refresh_window()
     
-def ligetIndito():
+def hotelIndito():
     global művelet
     művelet = 1
     global útvonal
@@ -170,11 +170,11 @@ def menu():
     window.title("Tevékenység")
     
     adoszamlaLekerdezes = tk.Button(window, text="Adószámla Lekérdezés", command=adoszamlaIndito)
-    ligetMakro = tk.Button(window, text="Liget Hotel", command=ligetIndito)
-    cafeMakro = tk.Button(window, text="Liget Cafe", command=cafeIndito)
+    hotelMakro = tk.Button(window, text="Hotel", command=hotelIndito)
+    cafeMakro = tk.Button(window, text="Cafe", command=cafeIndito)
     
     adoszamlaLekerdezes.pack()
-    ligetMakro.pack()
+    hotelMakro.pack()
     cafeMakro.pack()
     
     
@@ -547,7 +547,7 @@ def hotelezőMakró(df):
     #Rendezés
     df.sort_values(['Termék,szolgáltatás', 'Áfakulcs'], ascending=[True, True], inplace=True)
     
-def ligetHotel(): 
+def Hotel(): 
     # List all files in the folder
     files = os.listdir(útvonal)
 
@@ -781,10 +781,10 @@ def CaffeMakró(df):
                 df.at[index, "Tétel árbevétel főkönyv"] = "9112"
                 df.at[index, "Tétel gazdasági esemény"] = "!22"
             
-    #Rendezés       
+    #Rendezés
     df.sort_values(['Termék,szolgáltatás', 'Áfakulcs'], ascending=[True, True], inplace=True)
     
-def ligetCafe(): 
+def Cafe(): 
     # List all files in the folder
     files = os.listdir(útvonal)
 
@@ -852,9 +852,9 @@ if művelet == 0:
     adószámlázó()
     
 elif művelet == 1:
-    ligetHotel()
+    Hotel()
     
 elif művelet == 2:
-    ligetCafe()
+    Cafe()
     
         
