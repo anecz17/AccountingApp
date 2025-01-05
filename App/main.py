@@ -196,7 +196,7 @@ def menu():
     adoszamlaLekerdezes = tk.Button(window, text="Adószámla Lekérdezés", command=adoszamlaIndito)
     ligetMakro = tk.Button(window, text="Liget Hotel", command=ligetIndito)
     cafeMakro = tk.Button(window, text="Liget Cafe", command=cafeIndito)
-    előleg = tk.Button(window, text="Párosítás", command=előlegIndító)
+    előleg = tk.Button(window, text="Előleg", command=előlegIndító)
     
     adoszamlaLekerdezes.pack()
     ligetMakro.pack()
