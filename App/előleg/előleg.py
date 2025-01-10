@@ -69,25 +69,34 @@ def előlegező(df):
     duplicates = pd.DataFrame(columns=df.columns)
     print(duplicates)
     to_delete = []
+    skip = []
     
     df = df.sort_values(by='Követel HUF', ascending=True)
     df['Közös'] = df["Követel HUF"]
-    df.loc[df['Közös'].isnull(), 'Közös'] = df['Tartozik HUF']
+    df.loc[df['Tartozik HUF'] > 0, 'Közös'] = df['Tartozik HUF']
     df = df.sort_values(by='Közös', ascending=True)
     df = df.reset_index(drop=True)
+    print(df)
 
     for index1, row1 in df.iterrows():
         print(index1, len(to_delete))
+        if index1 in skip or index1 in to_delete:
+            continue
         for index2, row2 in df.iterrows():
-            if index1 >= index2:
+            if index2 in to_delete or index2 in skip:
                 continue
-            if index2 in to_delete:
-                continue
-            if row1["Követel HUF"] == row2["Tartozik HUF"] or row2["Követel HUF"] == row1["Tartozik HUF"]:
+            if row1["Közös"] == row2["Közös"]: # or row2["Követel HUF"] == row1["Tartozik HUF"]:
                 if str(row1["Számla száma"]) in str(row2["Leírás"]) or str(row2["Számla száma"]) in str(row1["Leírás"]):
-                    duplicates = pd.concat([duplicates, df.iloc[[index1]], df.iloc[[index2]]], ignore_index=True)
-                    to_delete.append(index1)
-                    to_delete.append(index2)
+                    if rec_check(df, to_delete, index1, index2, row1, row2):
+                        duplicates = pd.concat([duplicates, df.iloc[[index1]], df.iloc[[index2]]], ignore_index=True)
+                        to_delete.append(index1)
+                        to_delete.append(index2)
+                    else:
+                        # skip all rows that have share the same számlaszám
+                        for index3, row3 in df.iterrows():
+                            if str(row1["Számla száma"]) in str(row3["Leírás"]) or str(row3["Számla száma"]) in str(row1["Leírás"]):
+                                skip.append(index3)
+                        break
             elif row1["Közös"] < row2["Közös"]:
                 break
                     
@@ -97,127 +106,27 @@ def előlegező(df):
     df = df.drop(to_delete, axis=0).reset_index(drop=True)
     
     return duplicates, df
-    
-    
-                
-                
-    df["Tétel árbevétel áfa"] = None
-    df["Tétel gazdasági esemény"] = None
-    df["Tétel áfa gazdasági esemény"] = None
-    
-    # Iterate through every row
-    for index, row in df.iterrows():
-        vevo_adoszam = row['Vevő adószám']
 
-        #Adószám oszlop
-        if pd.isna(vevo_adoszam):
-            #print(f"NaN value found in row {index + 1}")
-            df.at[index, "Vevő neve"] = "Magánszemély vevő"
-            df.at[index, "Vevő irsz."] = None
-            df.at[index, "Vevő város"] = None
-            df.at[index, "Vevő utca"] = None
-            # Add your actions for NaN values in each row
-        #else:
-            #print(f"Non-NaN value found in row {index + 1}: {vevo_adoszam}")
-            # Add your actions for non-NaN values in each row
-        
-        
-         
-        #Áfakulcs oszlop
-        if row["Áfakulcs"] == "ATK":
-            df.at[index, "Tétel áfa gazdasági esemény"] = "ATHK"     
-        else:
-            df.at[index, "Tétel árbevétel áfa"] = "4671"
-            if row["Áfakulcs"] == "27":
-                df.at[index, "Tétel áfa gazdasági esemény"] = "27%"
-            elif row["Áfakulcs"] == "5":
-                substring = 'Előleg'
-                if substring.lower() in row['Termék,szolgáltatás'].lower():
-                    df.at[index, "Tétel áfa gazdasági esemény"] = "ELO5"
-                else:
-                    df.at[index, "Tétel áfa gazdasági esemény"] = "5%"
-            
-        #Termék,szolgáltatás --> Tétel árbevétel főkönyv, Tétel gazdasági esemény
-        ifa = ["ifa", "idegenforgalmi adó"]
-        szervizdij = ["szervízdíj", "szervizdíj", "szervízdij", "szervizdij"]
-        if "előleg" in row['Termék,szolgáltatás'].lower() or "egycélú" in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "4531"
-        elif "szállás" in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "9111"
-            df.at[index, "Tétel gazdasági esemény"] = "!11"
-        #szervízdíj
-        elif szervizdij[0] in row['Termék,szolgáltatás'].lower() or szervizdij[1] in row['Termék,szolgáltatás'].lower() or szervizdij[2] in row['Termék,szolgáltatás'].lower() or szervizdij[3] in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "9123"
-            if row["Áfakulcs"] == "27":
-                df.at[index, "Tétel gazdasági esemény"] = "!32"
-            if row["Áfakulcs"] == "5":
-                df.at[index, "Tétel gazdasági esemény"] = "!31"
-        elif "étel" in row['Termék,szolgáltatás'].lower() or \
-                "félpanzió" in row['Termék,szolgáltatás'].lower() or \
-                "étkezés" in row['Termék,szolgáltatás'].lower() or \
-                "reggeli" in row['Termék,szolgáltatás'].lower() or \
-                "ebéd" in row['Termék,szolgáltatás'].lower() or \
-                "vacsora" in row['Termék,szolgáltatás'].lower() or \
-                ("kedvezmény" in row['Termék,szolgáltatás'].lower() and "5" in row['Termék,szolgáltatás'].lower()):
-            df.at[index, "Tétel árbevétel főkönyv"] = "9121"
-            df.at[index, "Tétel gazdasági esemény"] = "!31"
-        elif "vital" in row['Termék,szolgáltatás'].lower() and "masszázs" in row['Termék,szolgáltatás'].lower(): 
-            df.at[index, "Tétel árbevétel főkönyv"] = "9114"
-            df.at[index, "Tétel gazdasági esemény"] = "!21"
-        elif "ital" in row['Termék,szolgáltatás'].lower() or \
-                "pepsi" in row['Termék,szolgáltatás'].lower() or \
-                "liget víz" in row['Termék,szolgáltatás'].lower() or \
-                "limonádé" in row['Termék,szolgáltatás'].lower() or \
-                "toma prémium" in row['Termék,szolgáltatás'].lower() or \
-                "szent andrás" in row['Termék,szolgáltatás'].lower() or \
-                "szódavíz" in row['Termék,szolgáltatás'].lower() or \
-                "pohár" in row['Termék,szolgáltatás'].lower() or \
-                "cappuccino" in row['Termék,szolgáltatás'].lower() or \
-                "jeges kávé" in row['Termék,szolgáltatás'].lower() or \
-                "espresso" in row['Termék,szolgáltatás'].lower() or \
-                "hosszúlépés" in row['Termék,szolgáltatás'].lower() or \
-                "nagyfröccs" in row['Termék,szolgáltatás'].lower() or \
-                "szentkirályi szénsav" in row['Termék,szolgáltatás'].lower() or \
-                "schweppes" in row['Termék,szolgáltatás'].lower() or \
-                "dérjuice" in row['Termék,szolgáltatás'].lower() or \
-                "aperol spritz" in row['Termék,szolgáltatás'].lower() or \
-                "7 up" in row['Termék,szolgáltatás'].lower() or \
-                "lipton ice tea" in row['Termék,szolgáltatás'].lower() or \
-                "fever tree tonic" in row['Termék,szolgáltatás'].lower() or \
-                "toma eper 0,25l" in row['Termék,szolgáltatás'].lower() or \
-                "egyszer használatos palack" in row['Termék,szolgáltatás'].lower() or \
-                "gasztró" in row['Termék,szolgáltatás'].lower() or \
-                "korsó" in row['Termék,szolgáltatás'].lower() or \
-                ("kedvezmény" in row['Termék,szolgáltatás'].lower() and "27" in row['Termék,szolgáltatás'].lower()):
-            df.at[index, "Tétel árbevétel főkönyv"] = "9122"
-            df.at[index, "Tétel gazdasági esemény"] = "!32"
-        elif "áru" in row['Termék,szolgáltatás'].lower() or "shop" in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "9131"
-            df.at[index, "Tétel gazdasági esemény"] = "!61"
-        elif "egyéb" in row['Termék,szolgáltatás'].lower() or \
-                "egyéb szolgáltatás" in row['Termék,szolgáltatás'].lower() or \
-                "vízibicikli" in row['Termék,szolgáltatás'].lower() or \
-                "vizibicikli" in row['Termék,szolgáltatás'].lower() or \
-                "kerékpár" in row['Termék,szolgáltatás'].lower() or \
-                "hajó" in row['Termék,szolgáltatás'].lower() or \
-                ("óra" in row['Termék,szolgáltatás'].lower() and \
-                    ("kajak" in row['Termék,szolgáltatás'].lower() or \
-                     "kenu" in row['Termék,szolgáltatás'].lower() or \
-                     "sup" in row['Termék,szolgáltatás'].lower())):
-            df.at[index, "Tétel árbevétel főkönyv"] = "9115"
-            df.at[index, "Tétel gazdasági esemény"] = "!21"
-        elif "wellness" in row['Termék,szolgáltatás'].lower() or \
-                "szauna" in row['Termék,szolgáltatás'].lower() or \
-                "masszázs" in row['Termék,szolgáltatás'].lower() or \
-                "maszázs" in row['Termék,szolgáltatás'].lower() or \
-                "szolárium" in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "9114"
-            df.at[index, "Tétel gazdasági esemény"] = "!21"
-        elif "apartman" in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "9112"
-            df.at[index, "Tétel gazdasági esemény"] = "!12"
-        elif ifa[0].lower() in row['Termék,szolgáltatás'].lower() or ifa[1].lower() in row['Termék,szolgáltatás'].lower():
-            df.at[index, "Tétel árbevétel főkönyv"] = "4694"
-            
-    #Rendezés
-    df.sort_values(['Termék,szolgáltatás', 'Áfakulcs'], ascending=[True, True], inplace=True)
+def rec_check(df, to_delete, pind1, pind2, prow1, prow2):
+    match = True
+    print("in rec_check for index: ", pind1)
+    for index1, row1 in df.iterrows():
+        if index1 <= pind1 or index1 == pind2:
+            continue
+        if row1["Közös"] != prow1["Közös"]:
+            continue
+        if str(row1["Számla száma"]) in str(prow1["Leírás"]) or str(prow1["Számla száma"]) in str(row1["Leírás"]) or str(row1["Számla száma"]) in str(prow2["Leírás"]) or str(prow2["Számla száma"]) in str(row1["Leírás"]):
+            print("more checking")
+            for index2, row2 in df.iterrows():
+                
+                if row2["Közös"] != row1["Közös"]:
+                    match = False
+                    continue
+                if index2 <= pind1 or index2 == pind2:
+                    continue
+                if str(row1["Számla száma"]) in str(row2["Leírás"]) or str(row2["Számla száma"]) in str(row1["Leírás"]):
+                    match = True
+                    return rec_check(df, to_delete, index1, index2, row1, row2)
+
+    print(match)  
+    return match
