@@ -17,17 +17,22 @@ def előleg(útvonal=None):
 
     # Filter out only CSV files
     excel_files = [file for file in files if file.endswith('.xlsx')]
-    
-    if excel_files:
+    csv_files = [file for file in files if file.endswith('.csv')]
+
+    print(excel_files, csv_files)
+    if excel_files and csv_files:
         # Assuming the first CSV file is the one you want to read
-        for excel_file in excel_files:
-            print(excel_file)
+        for [excel_file, csv_file] in zip(excel_files, csv_files):
+            print(excel_file, csv_file)
             # Construct the full path to the CSV file
             excel_file_path = os.path.join(útvonal, excel_file)
+            csv_file_path = os.path.join(útvonal, csv_file)
 
-            # Read the CSV file into a pandas DataFrame
             df = pd.read_excel(excel_file_path)
-
+            df_nevek = pd.read_csv(csv_file_path, sep=";", encoding='ISO-8859-2')
+            
+            df = nevesítő(df=df, df_nevek=df_nevek)
+            
             # Folder names to check
             folders_to_check = ["Előleg"]
             for folder_name in folders_to_check:
@@ -61,6 +66,20 @@ def előleg(útvonal=None):
     else:
         print("Nem található excel fájl a megadott mappában.")
     
+
+def nevesítő(df, df_nevek):
+    print(df)
+    for index1, row1 in df.iterrows():
+        for index2, row2 in df_nevek.iterrows():
+            if row1["Számla száma"] == row2["Számlaszám"]:
+                if 'Vevő neve' in df_nevek.columns:
+                    df.at[index1, "Partner"] = row2['Vevő neve']
+                    print("találat")    
+                else:
+                    row1['Partner'] = row2['Vevõ neve']
+                
+    print(df['Partner'])
+    return df
 
 
 def előlegező(df):
@@ -130,3 +149,4 @@ def rec_check(df, to_delete, pind1, pind2, prow1, prow2):
 
     print(match)  
     return match
+
