@@ -28,10 +28,6 @@ def előleg(útvonal=None):
             excel_file_path = os.path.join(útvonal, excel_file)
             csv_file_path = os.path.join(útvonal, csv_file)
 
-            df = pd.read_excel(excel_file_path)
-            df_nevek = pd.read_csv(csv_file_path, sep=";", encoding='ISO-8859-2')
-            
-            df = nevesítő(df=df, df_nevek=df_nevek)
             
             # Folder names to check
             folders_to_check = ["Előleg"]
@@ -44,23 +40,29 @@ def előleg(útvonal=None):
                 else:
                     print(f"The folder '{folder_name}' already exists at {útvonal}.")
             
-            pass
+            
+            df = pd.read_excel(excel_file_path)
             #Letöltött-be berakom az eredetit
             if len(df) >= 2:
                 új_név = df.at[1, "Könyvelés dátuma"]
                 új_név = új_név.replace('.', '_')
                 
                 # Feldolgozás
-                másolat, df = előlegező(df)
+                párban, pártalan = előlegező(df)
                     
+                df_nevek = pd.read_csv(csv_file_path, sep=";", encoding='ISO-8859-2')
+                pártalan = nevesítő(df=pártalan, df_nevek=df_nevek)
+                
                 with pd.ExcelWriter(útvonal + "Előleg\\" + új_név[:-1] + ".xlsx") as writer:
-                    df.to_excel(writer, sheet_name="pártalan", index=False)
-                    másolat.to_excel(writer, sheet_name="párban", index=False)
+                    pártalan.to_excel(writer, sheet_name="pártalan", index=False)
+                    párban.to_excel(writer, sheet_name="párban", index=False)
                     
                 os.startfile(útvonal + "Előleg\\" + új_név[:-1] + ".xlsx")
 
                 #Eredeti törlése
                 os.remove(excel_file_path)
+                
+            
             else:
                 print("Üres excel")
     else:
